@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Select size M before adding the product to the cart.",
+  "expected_check": "The size selector should show M.",
+  "action": {
+    "type": "SELECT_OPTION",
+    "target_text": null,
+    "field_text": "Size",
+    "input_text": null,
+    "option_text": "M",
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

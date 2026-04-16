@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Go to the cart after adding the item.",
+  "expected_check": "The cart screen should appear.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Cart (1)",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

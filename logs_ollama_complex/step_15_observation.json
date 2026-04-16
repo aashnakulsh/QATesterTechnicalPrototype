@@ -1,0 +1,41 @@
+{
+  "title": "QA Test App - Complex Flow",
+  "url": "http://127.0.0.1:8000/toy_app_complex.html",
+  "buttons": [
+    "Home",
+    "Cart (1)",
+    "Settings",
+    "Reset App",
+    "Place Order",
+    "Back to Cart"
+  ],
+  "inputs": [
+    {
+      "label": "Full Name",
+      "value": ""
+    },
+    {
+      "label": "Email",
+      "value": ""
+    },
+    {
+      "label": "Address",
+      "value": ""
+    },
+    {
+      "label": "ZIP Code",
+      "value": ""
+    }
+  ],
+  "selects": [
+    {
+      "label": "Delivery Method",
+      "value": "Standard",
+      "options": [
+        "Standard",
+        "Express"
+      ]
+    }
+  ],
+  "body_text": "QA Test App - Complex Shopping Flow\nA richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.\nHome\nCart (1)\nSettings\nReset App\nCheckout\nFull Name  Email  Address  ZIP Code  Delivery Method\nStandard\nExpress\nPlace Order\nBack to Cart\nCheckout Summary\nSubtotal\n$100\nShipping\n$8\nDiscount\n-$10\nTotal\n$98"
+}

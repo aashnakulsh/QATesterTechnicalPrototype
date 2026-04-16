@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Add the configured product to the cart.",
+  "expected_check": "The product page should confirm that the item was added.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Add to Cart",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

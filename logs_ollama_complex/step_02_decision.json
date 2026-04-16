@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Set the category filter to Outerwear before applying filters.",
+  "expected_check": "Category should be set to Outerwear.",
+  "action": {
+    "type": "SELECT_OPTION",
+    "target_text": null,
+    "field_text": "Category",
+    "input_text": null,
+    "option_text": "Outerwear",
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

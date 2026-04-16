@@ -1,0 +1,32 @@
+{
+  "title": "QA Test App - Complex Flow",
+  "url": "http://127.0.0.1:8000/toy_app_complex.html",
+  "buttons": [
+    "Home",
+    "Cart (0)",
+    "Settings",
+    "Reset App",
+    "Back to Catalog",
+    "Open Size Guide",
+    "Add to Cart"
+  ],
+  "inputs": [
+    {
+      "label": "Quantity",
+      "value": "1"
+    }
+  ],
+  "selects": [
+    {
+      "label": "Size",
+      "value": "M",
+      "options": [
+        "Select size",
+        "S",
+        "M",
+        "L"
+      ]
+    }
+  ],
+  "body_text": "QA Test App - Complex Shopping Flow\nA richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.\nHome\nCart (0)\nSettings\nReset App\nWinter Jacket\nProduct details\nBack to Catalog\nFree shipping over $50 30-day returns\n$100\nWaterproof shell with insulated lining.\nSize\nSelect size\nS\nM\nL\nQuantity\nOpen Size Guide\nAdd to Cart"
+}

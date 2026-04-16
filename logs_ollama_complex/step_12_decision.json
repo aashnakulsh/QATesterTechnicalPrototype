@@ -1,0 +1,25 @@
+{
+  "source": "fallback",
+  "thought": "The discount amount is visibly incorrect after coupon application.",
+  "expected_check": "Discount should be -$20 for one $100 jacket with SUMMER20.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Estimate Shipping",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": true,
+  "bug": {
+    "title": "Coupon applies incorrect discount",
+    "severity": "Medium",
+    "expected": "SUMMER20 should reduce a $100 subtotal by $20.",
+    "actual": "The order summary shows Discount -$10 after applying SUMMER20.",
+    "reason": "The pricing logic appears to apply the wrong discount amount."
+  },
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

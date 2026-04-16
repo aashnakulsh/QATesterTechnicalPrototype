@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Wait for the order processing state to complete.",
+  "expected_check": "The next visible state should reveal whether validation blocked submission.",
+  "action": {
+    "type": "WAIT_FOR_TEXT",
+    "target_text": "Order Confirmed",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": 1500
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Exercise the product modal once before adding to cart.",
+  "expected_check": "The size guide modal should appear.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Open Size Guide",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

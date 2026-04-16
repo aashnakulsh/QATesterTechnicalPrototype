@@ -1,0 +1,21 @@
+{
+  "title": "Coupon applies incorrect discount",
+  "severity": "Medium",
+  "expected": "SUMMER20 should reduce a $100 subtotal by $20.",
+  "actual": "The order summary shows Discount -$10 after applying SUMMER20.",
+  "reason": "The pricing logic appears to apply the wrong discount amount.",
+  "reproduction_steps": [
+    "Typed into \"Search products\".",
+    "Selected \"Outerwear\" for \"Category\".",
+    "Clicked 'Apply Filters'.",
+    "Clicked 'View Product'.",
+    "Clicked 'Open Size Guide'.",
+    "Clicked 'Close Size Guide'.",
+    "Selected \"M\" for \"Size\".",
+    "Clicked 'Add to Cart'.",
+    "Clicked 'Cart (1)'.",
+    "Typed into \"Coupon\".",
+    "Clicked 'Apply Coupon'.",
+    "Clicked 'Estimate Shipping'."
+  ]
+}

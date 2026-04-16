@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Test App - Complex Flow</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --border: #d9dbe1;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #1d4ed8;
+      --danger: #b91c1c;
+      --success: #166534;
+      --warning: #92400e;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .top-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .price {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 12px 0;
+    }
+    .muted { color: var(--muted); }
+    .error { color: var(--danger); }
+    .success { color: var(--success); }
+    .warning { color: var(--warning); }
+    button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #9ca3af;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    button.secondary {
+      background: #f8fafc;
+    }
+    button.small {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #bfc4cf;
+      margin: 8px 0 14px;
+      font-size: 14px;
+      background: white;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .between {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eceef3;
+    }
+    .summary-line:last-child { border-bottom: 0; }
+    .hidden { display: none !important; }
+    .banner {
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      width: min(480px, 100%);
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 860px) {
+      .product-grid, .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>QA Test App - Complex Shopping Flow</h1>
+        <p class="muted">A richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.</p>
+      </div>
+      <div class="top-actions">
+        <button id="nav-home" class="secondary">Home</button>
+        <button id="nav-cart" class="secondary">Cart (0)</button>
+        <button id="nav-settings" class="secondary">Settings</button>
+        <button id="reset-app" class="secondary">Reset App</button>
+      </div>
+    </div>
+
+    <section id="home-screen" class="screen active">
+      <div class="card">
+        <h2>Catalog</h2>
+        <div class="grid">
+          <div>
+            <label for="search-input">Search products</label>
+            <input id="search-input" name="Search products" placeholder="Search products" />
+          </div>
+          <div>
+            <label for="category-select">Category</label>
+            <select id="category-select" name="Category">
+              <option>All</option>
+              <option>Outerwear</option>
+              <option>Accessories</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <button id="apply-filters" class="primary small">Apply Filters</button>
+          <button id="clear-filters" class="small">Clear Filters</button>
+          <span id="filter-status" class="muted">No filters applied.</span>
+        </div>
+      </div>
+
+      <div class="banner" id="search-banner">Tip: search for "jacket" and filter by Outerwear.</div>
+
+      <div class="product-grid" id="product-grid">
+        <div class="product-card" data-name="Winter Jacket" data-category="Outerwear">
+          <span class="pill">Outerwear</span>
+          <h3>Winter Jacket</h3>
+          <p class="muted">Waterproof shell with insulated lining.</p>
+          <div class="price">$100</div>
+          <div class="row">
+            <button class="view-product" data-product="Winter Jacket">View Product</button>
+            <button class="quick-add" data-product="Winter Jacket">Quick Add</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-name="Wool Scarf" data-category="Accessories">
+          <span class="pill">Accessories</span>
+          <h3>Wool Scarf</h3>
+          <p class="muted">Soft knit scarf for cold weather.</p>
+          <div class="price">$35</div>
+          <div class="row">
+            <button class="view-product" data-product="Wool Scarf">View Product</button>
+            <button class="quick-add" data-product="Wool Scarf">Quick Add</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-name="Rain Shell" data-category="Outerwear">
+          <span class="pill">Outerwear</span>
+          <h3>Rain Shell</h3>
+          <p class="muted">Lightweight outer shell for travel.</p>
+          <div class="price">$80</div>
+          <div class="row">
+            <button class="view-product" data-product="Rain Shell">View Product</button>
+            <button class="quick-add" data-product="Rain Shell">Quick Add</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="product-screen" class="screen">
+      <div class="card">
+        <div class="between">
+          <div>
+            <h2 id="product-title">Winter Jacket</h2>
+            <p id="product-subtitle" class="muted">Product details</p>
+          </div>
+          <button id="back-to-home">Back to Catalog</button>
+        </div>
+
+        <div class="grid">
+          <div>
+            <div class="tag">Free shipping over $50</div>
+            <div class="tag">30-day returns</div>
+            <div class="price" id="product-price">$100</div>
+            <p id="product-description" class="muted">Waterproof shell with insulated lining.</p>
+          </div>
+          <div>
+            <label for="size-select">Size</label>
+            <select id="size-select" name="Size">
+              <option>Select size</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+            </select>
+
+            <label for="qty-input">Quantity</label>
+            <input id="qty-input" name="Quantity" type="number" min="1" value="1" placeholder="Quantity" />
+
+            <div class="row">
+              <button id="open-size-guide" class="small">Open Size Guide</button>
+              <button id="add-to-cart" class="primary">Add to Cart</button>
+            </div>
+            <div id="product-error" class="error"></div>
+            <div id="product-message" class="success"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cart-screen" class="screen">
+      <div class="grid">
+        <div class="card">
+          <h2>Cart</h2>
+          <div id="cart-items"></div>
+          <div id="empty-cart-message" class="muted">Your cart is empty.</div>
+        </div>
+
+        <div class="card">
+          <h2>Order Summary</h2>
+          <label for="coupon-input">Coupon</label>
+          <input id="coupon-input" name="Coupon" placeholder="Coupon" />
+          <div class="row">
+            <button id="apply-coupon">Apply Coupon</button>
+            <button id="estimate-shipping">Estimate Shipping</button>
+          </div>
+          <div id="coupon-message" class="muted"></div>
+          <div id="shipping-status" class="muted"></div>
+          <div class="summary-line"><span>Subtotal</span><span id="subtotal-value">$0</span></div>
+          <div class="summary-line"><span>Shipping</span><span id="shipping-value">$0</span></div>
+          <div class="summary-line"><span>Discount</span><span id="discount-value">$0</span></div>
+          <div class="summary-line"><strong>Total</strong><strong id="total-value">$0</strong></div>
+          <div class="row" style="margin-top: 14px;">
+            <button id="go-to-checkout" class="primary">Proceed to Checkout</button>
+            <button id="continue-shopping">Continue Shopping</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout-screen" class="screen">
+      <div class="grid">
+        <div class="card">
+          <h2>Checkout</h2>
+          <label for="full-name">Full Name</label>
+          <input id="full-name" name="Full Name" placeholder="Full Name" />
+
+          <label for="email">Email</label>
+          <input id="email" name="Email" placeholder="Email" />
+
+          <label for="address">Address</label>
+          <input id="address" name="Address" placeholder="Address" />
+
+          <label for="zip-code">ZIP Code</label>
+          <input id="zip-code" name="ZIP Code" placeholder="ZIP Code" />
+
+          <label for="delivery-select">Delivery Method</label>
+          <select id="delivery-select" name="Delivery Method">
+            <option>Standard</option>
+            <option>Express</option>
+          </select>
+
+          <div class="row">
+            <button id="place-order" class="primary">Place Order</button>
+            <button id="back-to-cart">Back to Cart</button>
+          </div>
+
+          <div id="checkout-error" class="error"></div>
+          <div id="checkout-message" class="success"></div>
+        </div>
+
+        <div class="card">
+          <h2>Checkout Summary</h2>
+          <div id="checkout-summary"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="success-screen" class="screen">
+      <div class="card">
+        <h2 class="success">Order Confirmed</h2>
+        <p>Your order was placed successfully.</p>
+        <p id="success-order-id" class="muted">Order ID: QA-2048</p>
+        <div class="row">
+          <button id="return-home" class="primary">Return Home</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-screen" class="screen">
+      <div class="card">
+        <h2>Settings</h2>
+        <p class="muted">Use this page to test toggles and preference persistence.</p>
+        <label for="save-card-toggle">Save card for later</label>
+        <select id="save-card-toggle" name="Save card for later">
+          <option>Off</option>
+          <option>On</option>
+        </select>
+
+        <label for="marketing-toggle">Marketing emails</label>
+        <select id="marketing-toggle" name="Marketing emails">
+          <option>Off</option>
+          <option>On</option>
+        </select>
+
+        <div class="row">
+          <button id="save-settings" class="primary">Save Settings</button>
+          <button id="settings-home">Return Home</button>
+        </div>
+        <div id="settings-message" class="muted"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="size-guide-overlay" class="modal-overlay">
+    <div class="modal">
+      <h3>Size Guide</h3>
+      <p class="muted">This modal gives the agent another UI element to open and close.</p>
+      <p>S = Chest 34–36, M = Chest 38–40, L = Chest 42–44</p>
+      <div class="row">
+        <button id="close-size-guide" class="primary">Close Size Guide</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      currentScreen: 'home',
+      selectedProduct: {
+        name: 'Winter Jacket',
+        price: 100,
+        description: 'Waterproof shell with insulated lining.',
+      },
+      cart: [],
+      shipping: 0,
+      discount: 0,
+      settings: {
+        saveCard: 'Off',
+        marketing: 'Off',
+      },
+    };
+
+    const screens = {
+      home: document.getElementById('home-screen'),
+      product: document.getElementById('product-screen'),
+      cart: document.getElementById('cart-screen'),
+      checkout: document.getElementById('checkout-screen'),
+      success: document.getElementById('success-screen'),
+      settings: document.getElementById('settings-screen'),
+    };
+
+    const products = {
+      'Winter Jacket': { name: 'Winter Jacket', price: 100, description: 'Waterproof shell with insulated lining.' },
+      'Wool Scarf': { name: 'Wool Scarf', price: 35, description: 'Soft knit scarf for cold weather.' },
+      'Rain Shell': { name: 'Rain Shell', price: 80, description: 'Lightweight outer shell for travel.' },
+    };
+
+    function showScreen(name) {
+      Object.values(screens).forEach((screen) => screen.classList.remove('active'));
+      screens[name].classList.add('active');
+      state.currentScreen = name;
+      renderCart();
+      renderCheckoutSummary();
+      syncNav();
+    }
+
+    function syncNav() {
+      const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('nav-cart').textContent = `Cart (${cartCount})`;
+    }
+
+    function setProduct(name) {
+      const product = products[name];
+      state.selectedProduct = product;
+      document.getElementById('product-title').textContent = product.name;
+      document.getElementById('product-price').textContent = `$${product.price}`;
+      document.getElementById('product-description').textContent = product.description;
+      document.getElementById('qty-input').value = '1';
+      document.getElementById('size-select').value = 'Select size';
+      document.getElementById('product-error').textContent = '';
+      document.getElementById('product-message').textContent = '';
+      showScreen('product');
+    }
+
+    function subtotal() {
+      return state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function total() {
+      return subtotal() + state.shipping - state.discount;
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById('cart-items');
+      const empty = document.getElementById('empty-cart-message');
+      cartItems.innerHTML = '';
+
+      if (!state.cart.length) {
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        state.cart.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = 'card';
+          row.style.marginBottom = '10px';
+          row.innerHTML = `
+            <div class="between">
+              <div>
+                <div><strong>${item.name}</strong></div>
+                <div class="muted">Size: ${item.size}</div>
+                <div class="muted">Quantity: ${item.quantity}</div>
+              </div>
+              <div>
+                <div><strong>$${item.price * item.quantity}</strong></div>
+                <button class="small remove-item" data-index="${index}">Remove Item</button>
+              </div>
+            </div>
+          `;
+          cartItems.appendChild(row);
+        });
+      }
+
+      document.getElementById('subtotal-value').textContent = `$${subtotal()}`;
+      document.getElementById('shipping-value').textContent = `$${state.shipping}`;
+      document.getElementById('discount-value').textContent = `-$${state.discount}`;
+      document.getElementById('total-value').textContent = `$${total()}`;
+
+      document.querySelectorAll('.remove-item').forEach((button) => {
+        button.addEventListener('click', () => {
+          const idx = Number(button.dataset.index);
+          state.cart.splice(idx, 1);
+          renderCart();
+          renderCheckoutSummary();
+          syncNav();
+        });
+      });
+    }
+
+    function renderCheckoutSummary() {
+      const container = document.getElementById('checkout-summary');
+      container.innerHTML = `
+        <div class="summary-line"><span>Subtotal</span><span>$${subtotal()}</span></div>
+        <div class="summary-line"><span>Shipping</span><span>$${state.shipping}</span></div>
+        <div class="summary-line"><span>Discount</span><span>-$${state.discount}</span></div>
+        <div class="summary-line"><strong>Total</strong><strong>$${total()}</strong></div>
+      `;
+    }
+
+    function resetMessages() {
+      document.getElementById('coupon-message').textContent = '';
+      document.getElementById('shipping-status').textContent = '';
+      document.getElementById('checkout-error').textContent = '';
+      document.getElementById('checkout-message').textContent = '';
+      document.getElementById('settings-message').textContent = '';
+    }
+
+    document.getElementById('nav-home').addEventListener('click', () => showScreen('home'));
+    document.getElementById('nav-cart').addEventListener('click', () => showScreen('cart'));
+    document.getElementById('nav-settings').addEventListener('click', () => showScreen('settings'));
+    document.getElementById('settings-home').addEventListener('click', () => showScreen('home'));
+    document.getElementById('back-to-home').addEventListener('click', () => showScreen('home'));
+    document.getElementById('continue-shopping').addEventListener('click', () => showScreen('home'));
+    document.getElementById('back-to-cart').addEventListener('click', () => showScreen('cart'));
+    document.getElementById('go-to-checkout').addEventListener('click', () => showScreen('checkout'));
+    document.getElementById('return-home').addEventListener('click', () => showScreen('home'));
+
+    document.querySelectorAll('.view-product').forEach((button) => {
+      button.addEventListener('click', () => setProduct(button.dataset.product));
+    });
+
+    document.querySelectorAll('.quick-add').forEach((button) => {
+      button.addEventListener('click', () => {
+        const product = products[button.dataset.product];
+        state.cart.push({ ...product, quantity: 1, size: 'M' });
+        syncNav();
+        renderCart();
+      });
+    });
+
+    document.getElementById('apply-filters').addEventListener('click', () => {
+      const search = document.getElementById('search-input').value.trim().toLowerCase();
+      const category = document.getElementById('category-select').value;
+      const cards = document.querySelectorAll('.product-card');
+
+      cards.forEach((card) => {
+        const name = card.dataset.name.toLowerCase();
+        const cardCategory = card.dataset.category;
+        const matchesSearch = !search || name.includes(search);
+        const matchesCategory = category === 'All' || category === cardCategory;
+        card.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+      });
+
+      document.getElementById('filter-status').textContent = `Filters applied: search="${search || 'none'}", category="${category}".`;
+    });
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('category-select').value = 'All';
+      document.querySelectorAll('.product-card').forEach((card) => {
+        card.style.display = 'block';
+      });
+      document.getElementById('filter-status').textContent = 'No filters applied.';
+    });
+
+    document.getElementById('open-size-guide').addEventListener('click', () => {
+      document.getElementById('size-guide-overlay').classList.add('active');
+    });
+
+    document.getElementById('close-size-guide').addEventListener('click', () => {
+      document.getElementById('size-guide-overlay').classList.remove('active');
+    });
+
+    document.getElementById('add-to-cart').addEventListener('click', () => {
+      const size = document.getElementById('size-select').value;
+      const quantity = Number(document.getElementById('qty-input').value);
+      const error = document.getElementById('product-error');
+      const message = document.getElementById('product-message');
+      error.textContent = '';
+      message.textContent = '';
+
+      if (size === 'Select size') {
+        error.textContent = 'Please select a size before adding to cart.';
+        return;
+      }
+
+      if (!quantity || quantity < 1) {
+        error.textContent = 'Quantity must be at least 1.';
+        return;
+      }
+
+      state.cart.push({
+        ...state.selectedProduct,
+        size,
+        quantity,
+      });
+
+      message.textContent = 'Item added to cart.';
+      syncNav();
+      renderCart();
+    });
+
+    document.getElementById('apply-coupon').addEventListener('click', () => {
+      const coupon = document.getElementById('coupon-input').value.trim();
+      const message = document.getElementById('coupon-message');
+      message.textContent = '';
+      state.discount = 0;
+
+      if (coupon === 'SUMMER20') {
+        // Intentional bug: should be 20, but incorrect discount is 10.
+        state.discount = 10;
+        message.textContent = 'Coupon applied.';
+      } else if (coupon) {
+        message.textContent = 'Coupon code not recognized.';
+      }
+
+      renderCart();
+      renderCheckoutSummary();
+    });
+
+    document.getElementById('estimate-shipping').addEventListener('click', () => {
+      const status = document.getElementById('shipping-status');
+      status.textContent = 'Calculating shipping...';
+      setTimeout(() => {
+        state.shipping = 8;
+        status.textContent = 'Shipping estimate ready.';
+        renderCart();
+        renderCheckoutSummary();
+      }, 900);
+    });
+
+    document.getElementById('save-settings').addEventListener('click', () => {
+      state.settings.saveCard = document.getElementById('save-card-toggle').value;
+      state.settings.marketing = document.getElementById('marketing-toggle').value;
+      document.getElementById('settings-message').textContent = 'Settings saved.';
+    });
+
+    document.getElementById('place-order').addEventListener('click', () => {
+      const fullName = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const zip = document.getElementById('zip-code').value.trim();
+      const error = document.getElementById('checkout-error');
+      const message = document.getElementById('checkout-message');
+      error.textContent = '';
+      message.textContent = '';
+
+      if (!fullName || !email || !address) {
+        error.textContent = 'Please complete all required fields.';
+        return;
+      }
+
+      // Intentional bug: invalid ZIP should be blocked, but the app still succeeds.
+      if (zip.length < 5) {
+        message.textContent = 'Processing order...';
+        setTimeout(() => {
+          showScreen('success');
+        }, 500);
+        return;
+      }
+
+      setTimeout(() => {
+        showScreen('success');
+      }, 500);
+    });
+
+    document.getElementById('reset-app').addEventListener('click', () => {
+      state.currentScreen = 'home';
+      state.selectedProduct = products['Winter Jacket'];
+      state.cart = [];
+      state.shipping = 0;
+      state.discount = 0;
+      state.settings = { saveCard: 'Off', marketing: 'Off' };
+      document.getElementById('search-input').value = '';
+      document.getElementById('category-select').value = 'All';
+      document.getElementById('coupon-input').value = '';
+      document.getElementById('full-name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('address').value = '';
+      document.getElementById('zip-code').value = '';
+      document.getElementById('delivery-select').value = 'Standard';
+      document.getElementById('size-select').value = 'Select size';
+      document.getElementById('qty-input').value = '1';
+      document.getElementById('save-card-toggle').value = 'Off';
+      document.getElementById('marketing-toggle').value = 'Off';
+      document.getElementById('filter-status').textContent = 'No filters applied.';
+      document.querySelectorAll('.product-card').forEach((card) => {
+        card.style.display = 'block';
+      });
+      resetMessages();
+      document.getElementById('size-guide-overlay').classList.remove('active');
+      renderCart();
+      renderCheckoutSummary();
+      syncNav();
+      showScreen('home');
+    });
+
+    renderCart();
+    renderCheckoutSummary();
+    syncNav();
+  </script>
+</body>
+</html>

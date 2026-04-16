@@ -1,0 +1,23 @@
+{
+  "title": "QA Test App - Complex Flow",
+  "url": "http://127.0.0.1:8000/toy_app_complex.html",
+  "buttons": [
+    "Home",
+    "Cart (1)",
+    "Settings",
+    "Reset App",
+    "Remove Item",
+    "Apply Coupon",
+    "Estimate Shipping",
+    "Proceed to Checkout",
+    "Continue Shopping"
+  ],
+  "inputs": [
+    {
+      "label": "Coupon",
+      "value": "SUMMER20"
+    }
+  ],
+  "selects": [],
+  "body_text": "QA Test App - Complex Shopping Flow\nA richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.\nHome\nCart (1)\nSettings\nReset App\nCart\nWinter Jacket\nSize: M\nQuantity: 1\n$100\nRemove Item\nOrder Summary\nCoupon\nApply Coupon\nEstimate Shipping\nCoupon applied.\nSubtotal\n$100\nShipping\n$0\nDiscount\n-$10\nTotal\n$90\nProceed to Checkout\nContinue Shopping"
+}

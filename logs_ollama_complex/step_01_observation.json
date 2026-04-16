@@ -1,0 +1,32 @@
+{
+  "title": "QA Test App - Complex Flow",
+  "url": "http://127.0.0.1:8000/toy_app_complex.html",
+  "buttons": [
+    "Home",
+    "Cart (0)",
+    "Settings",
+    "Reset App",
+    "Apply Filters",
+    "Clear Filters",
+    "View Product",
+    "Quick Add"
+  ],
+  "inputs": [
+    {
+      "label": "Search products",
+      "value": ""
+    }
+  ],
+  "selects": [
+    {
+      "label": "Category",
+      "value": "All",
+      "options": [
+        "All",
+        "Outerwear",
+        "Accessories"
+      ]
+    }
+  ],
+  "body_text": "QA Test App - Complex Shopping Flow\nA richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.\nHome\nCart (0)\nSettings\nReset App\nCatalog\nSearch products\nCategory\nAll\nOuterwear\nAccessories\nApply Filters\nClear Filters\nNo filters applied.\nTip: search for \"jacket\" and filter by Outerwear.\nOuterwear\nWinter Jacket\nWaterproof shell with insulated lining.\n$100\nView Product\nQuick Add\nAccessories\nWool Scarf\nSoft knit scarf for cold weather.\n$35\nView Product\nQuick Add\nOuterwear\nRain Shell\nLightweight outer shell for travel.\n$80\nView Product\nQuick Add"
+}

@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Fill the address field before submission.",
+  "expected_check": "Address should be set.",
+  "action": {
+    "type": "TYPE_TEXT",
+    "target_text": null,
+    "field_text": "Address",
+    "input_text": "500 Forbes Ave",
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "1 validation error for DecisionModel\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='\u251a\\n\\n</think>\\n\\nThe p...stem confirms the order', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+    "fallback_used": true
+  }
+}

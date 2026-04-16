@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Submit the checkout form and check whether invalid ZIP is blocked.",
+  "expected_check": "The app should show a validation error instead of reaching success.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Place Order",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "1 validation error for DecisionModel\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='\u21a0\\n\\n</think>\\n\\nThe p...Name\" field.\\n2. **Step', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+    "fallback_used": true
+  }
+}

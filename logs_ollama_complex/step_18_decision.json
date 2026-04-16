@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Use an obviously invalid ZIP to test validation.",
+  "expected_check": "ZIP Code should be set to 12 before submission.",
+  "action": {
+    "type": "TYPE_TEXT",
+    "target_text": null,
+    "field_text": "ZIP Code",
+    "input_text": "12",
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

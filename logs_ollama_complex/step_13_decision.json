@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Wait for the asynchronous shipping estimate to complete.",
+  "expected_check": "The page should show Shipping estimate ready.",
+  "action": {
+    "type": "WAIT_FOR_TEXT",
+    "target_text": "Shipping estimate ready.",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": 2000
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

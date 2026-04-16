@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Open the target product page.",
+  "expected_check": "The product page should load for Winter Jacket.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "View Product",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

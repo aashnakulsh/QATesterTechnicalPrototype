@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toy QA App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 16px;
+      line-height: 1.4;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .hidden { display: none; }
+    button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #999;
+      background: white;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 280px;
+    }
+    .muted { color: #666; }
+    .error { color: #b00020; }
+    .success { color: #0a7a2f; }
+  </style>
+</head>
+<body>
+  <h1>Toy Shopping App</h1>
+  <p class="muted">This app is intentionally buggy for QA testing.</p>
+
+  <div id="home" class="card">
+    <h2>Home</h2>
+    <p>Winter Jacket</p>
+    <p>$100</p>
+    <button id="view-product">View Product</button>
+  </div>
+
+  <div id="product" class="card hidden">
+    <h2>Product</h2>
+    <p>Winter Jacket</p>
+    <p>One item available for testing.</p>
+    <button id="add-to-cart">Add to Cart</button>
+  </div>
+
+  <div id="cart" class="card hidden">
+    <h2>Cart</h2>
+    <p>Winter Jacket</p>
+    <label for="coupon">Coupon</label>
+    <input id="coupon" name="coupon" placeholder="Coupon" />
+    <button id="apply-coupon">Apply Coupon</button>
+    <p id="total">Total: $100</p>
+    <button id="checkout">Checkout</button>
+  </div>
+
+  <div id="checkout-screen" class="card hidden">
+    <h2>Checkout</h2>
+    <input id="full-name" name="Full Name" placeholder="Full Name" />
+    <input id="zip-code" name="ZIP Code" placeholder="ZIP Code" />
+    <input id="address" name="Address" placeholder="Address" />
+    <div id="zip-error" class="error"></div>
+    <button id="place-order">Place Order</button>
+  </div>
+
+  <div id="success" class="card hidden">
+    <h2 class="success">Order Confirmed</h2>
+    <p>Thank you. Your order was placed successfully.</p>
+    <button id="done">Done</button>
+  </div>
+
+  <script>
+    const screens = {
+      home: document.getElementById("home"),
+      product: document.getElementById("product"),
+      cart: document.getElementById("cart"),
+      checkout: document.getElementById("checkout-screen"),
+      success: document.getElementById("success"),
+    };
+
+    function show(name) {
+      Object.values(screens).forEach(el => el.classList.add("hidden"));
+      screens[name].classList.remove("hidden");
+    }
+
+    document.getElementById("view-product").addEventListener("click", () => {
+      show("product");
+    });
+
+    document.getElementById("add-to-cart").addEventListener("click", () => {
+      show("cart");
+    });
+
+    document.getElementById("apply-coupon").addEventListener("click", () => {
+      const coupon = document.getElementById("coupon").value.trim();
+      const total = document.getElementById("total");
+
+      // Intentional bug: SUMMER20 should make total $80, but this buggy app makes it $95
+      if (coupon === "SUMMER20") {
+        total.textContent = "Total: $95";
+      } else {
+        total.textContent = "Total: $100";
+      }
+    });
+
+    document.getElementById("checkout").addEventListener("click", () => {
+      show("checkout");
+    });
+
+    document.getElementById("place-order").addEventListener("click", () => {
+      const zip = document.getElementById("zip-code").value.trim();
+      const error = document.getElementById("zip-error");
+
+      // Intentional bug: invalid ZIP codes should be blocked, but this buggy app still succeeds
+      error.textContent = "";
+      show("success");
+    });
+
+    document.getElementById("done").addEventListener("click", () => {
+      show("home");
+      document.getElementById("coupon").value = "";
+      document.getElementById("total").textContent = "Total: $100";
+      document.getElementById("full-name").value = "";
+      document.getElementById("zip-code").value = "";
+      document.getElementById("address").value = "";
+      document.getElementById("zip-error").textContent = "";
+    });
+  </script>
+</body>
+</html>

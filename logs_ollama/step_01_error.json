@@ -1,0 +1,4 @@
+{
+  "step": 1,
+  "error": "1 validation error for DecisionModel\n  Invalid JSON: EOF while parsing a value at line 1 column 0 [type=json_invalid, input_value='', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+}

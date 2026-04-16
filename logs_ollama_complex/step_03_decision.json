@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Apply the current catalog filters.",
+  "expected_check": "Winter Jacket should remain visible.",
+  "action": {
+    "type": "CLICK_TEXT",
+    "target_text": "Apply Filters",
+    "field_text": null,
+    "input_text": null,
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}

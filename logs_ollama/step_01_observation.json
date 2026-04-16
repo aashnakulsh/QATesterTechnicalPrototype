@@ -1,0 +1,9 @@
+{
+  "title": "Toy QA App",
+  "url": "http://127.0.0.1:8000/toy_app.html",
+  "buttons": [
+    "View Product"
+  ],
+  "inputs": [],
+  "body_text": "Toy Shopping App\nThis app is intentionally buggy for QA testing.\nHome\nWinter Jacket\n$100\nView Product"
+}

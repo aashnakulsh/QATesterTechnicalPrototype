@@ -1,0 +1,19 @@
+{
+  "source": "fallback",
+  "thought": "Start by narrowing the catalog to the target product.",
+  "expected_check": "The search field should contain jacket.",
+  "action": {
+    "type": "TYPE_TEXT",
+    "target_text": null,
+    "field_text": "Search products",
+    "input_text": "jacket",
+    "option_text": null,
+    "wait_ms": null
+  },
+  "bug_suspected": false,
+  "bug": null,
+  "meta": {
+    "ollama_error": "Ollama returned empty content",
+    "fallback_used": true
+  }
+}
