@@ -3,412 +3,1109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QA Test App - Complex Flow</title>
+  <title>MAVEN — Premium Clothing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f7f7f8;
+      --bg: #faf9f7;
       --card: #ffffff;
-      --border: #d9dbe1;
-      --text: #111827;
-      --muted: #6b7280;
-      --accent: #1d4ed8;
-      --danger: #b91c1c;
-      --success: #166534;
-      --warning: #92400e;
+      --border: #e8e2d9;
+      --text: #1a1a1a;
+      --muted: #8a8680;
+      --accent: #c9a96e;
+      --accent-dark: #a0804a;
+      --danger: #9b2335;
+      --success: #2d6a4f;
+      --nav-bg: #1a1a1a;
+      --nav-text: #ffffff;
+      --soft: #f5f2ee;
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
     }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 18px 40px;
-    }
-    .header {
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--nav-bg);
+      color: var(--nav-text);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      gap: 16px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 24px;
     }
-    h1, h2, h3, p { margin-top: 0; }
-    .top-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .navbar-brand span {
+      color: var(--accent);
+    }
+
+    .navbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.85);
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .nav-btn.cart-btn {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .nav-btn.cart-btn:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
+    .nav-btn.ghost {
+      border-color: transparent;
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+    }
+
+    .nav-btn.ghost:hover {
+      color: rgba(255,255,255,0.75);
+      background: transparent;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 24px 64px;
+    }
+
     .screen { display: none; }
     .screen.active { display: block; }
+    .hidden { display: none !important; }
+
+    h1, h2, h3 { margin-top: 0; font-family: 'Playfair Display', serif; font-weight: 600; }
+    p { margin-top: 0; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2420 60%, #3d3028 100%);
+      border-radius: 16px;
+      padding: 64px 48px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+      color: white;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      max-width: 400px;
+      margin-bottom: 28px;
+    }
+
+    /* ── CARDS ── */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 20px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
     }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-    .product-card {
-      background: white;
+
+    /* ── FILTERS ── */
+    .filter-bar {
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
     }
-    .pill {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1e40af;
-      font-size: 12px;
-      margin-bottom: 10px;
+
+    .filter-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 160px;
     }
-    .price {
-      font-size: 24px;
-      font-weight: 700;
-      margin: 12px 0;
+
+    .filter-field label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-    .muted { color: var(--muted); }
-    .error { color: var(--danger); }
-    .success { color: var(--success); }
-    .warning { color: var(--warning); }
-    button {
+
+    .filter-field input,
+    .filter-field select {
+      margin: 0;
       padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid #9ca3af;
-      background: white;
-      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s;
     }
-    button.primary {
-      background: var(--accent);
-      color: white;
+
+    .filter-field input:focus,
+    .filter-field select:focus {
+      outline: none;
       border-color: var(--accent);
     }
-    button.secondary {
-      background: #f8fafc;
+
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      align-items: center;
+      flex-wrap: wrap;
     }
-    button.small {
-      padding: 8px 10px;
+
+    #filter-status {
+      font-size: 12px;
+      color: var(--muted);
+      width: 100%;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .product-image {
+      height: 220px;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+      position: relative;
+    }
+
+    .product-image.jacket {
+      background: linear-gradient(145deg, #2c3e50 0%, #3d4f63 50%, #1a2534 100%);
+    }
+
+    .product-image.scarf {
+      background: linear-gradient(145deg, #7b4f3a 0%, #9b6348 50%, #5c3828 100%);
+    }
+
+    .product-image.shell {
+      background: linear-gradient(145deg, #2d5016 0%, #3d6b1e 50%, #1e3a0d 100%);
+    }
+
+    .product-image-decoration {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.12) 0%, transparent 60%);
+    }
+
+    .product-category-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .product-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .product-desc {
+      color: var(--muted);
       font-size: 13px;
+      margin-bottom: 14px;
+      flex: 1;
     }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .price-small {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .product-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── BUTTONS ── */
+    button {
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+    }
+
+    .btn {
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--text);
+      color: #ffffff;
+      border-color: var(--text);
+    }
+
+    .btn-primary:hover { background: #333; border-color: #333; }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #1a1a1a;
+      border-color: var(--accent);
+    }
+
+    .btn-accent:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover { border-color: #aaa; background: var(--soft); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border-color: transparent;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .btn-ghost:hover { color: var(--text); }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border-color: #f5c2c7;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .btn-danger:hover { background: #fff5f5; }
+
+    /* ── FORMS ── */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
     input, select {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #bfc4cf;
-      margin: 8px 0 14px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
-      background: white;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      margin: 0;
     }
-    label {
-      font-size: 14px;
-      font-weight: 600;
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.15);
     }
+
+    /* ── LAYOUT HELPERS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .sidebar-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      align-items: start;
+    }
+
     .row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       align-items: center;
     }
+
     .between {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
     }
+
+    /* ── MESSAGES ── */
+    .muted { color: var(--muted); }
+    .text-error { color: var(--danger); font-size: 13px; margin-top: 8px; }
+    .text-success { color: var(--success); font-size: 13px; margin-top: 8px; }
+    .text-warning { color: #92400e; font-size: 13px; margin-top: 8px; }
+
+    /* ── BANNER ── */
+    .banner {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      background: #f8f4ec;
+      border: 1px solid #e6d9c0;
+      color: #7a5c28;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .banner::before {
+      content: '✦';
+      color: var(--accent);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ── ORDER SUMMARY ── */
     .summary-line {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #eceef3;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
     }
+
     .summary-line:last-child { border-bottom: 0; }
-    .hidden { display: none !important; }
-    .banner {
-      border-radius: 12px;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      border: 1px solid #c7d2fe;
-      background: #eef2ff;
-      color: #3730a3;
+
+    .summary-total {
+      font-weight: 700;
+      font-size: 16px;
+      padding-top: 14px;
     }
+
+    /* ── CART ITEM ── */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+
+    .cart-item:first-child { padding-top: 0; }
+    .cart-item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    .cart-item-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-thumb.jacket { background: linear-gradient(145deg, #2c3e50, #3d4f63); }
+    .cart-item-thumb.scarf  { background: linear-gradient(145deg, #7b4f3a, #9b6348); }
+    .cart-item-thumb.shell  { background: linear-gradient(145deg, #2d5016, #3d6b1e); }
+
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
+    .cart-item-meta { color: var(--muted); font-size: 12px; }
+    .cart-item-price { font-weight: 700; font-size: 15px; text-align: right; }
+
+    /* ── PRODUCT DETAIL TAGS ── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      font-size: 12px;
+      border-radius: 999px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      margin-right: 6px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .tag::before { content: '✓'; color: var(--success); font-size: 11px; }
+
+    /* ── PRODUCT DETAIL IMAGE ── */
+    .detail-image {
+      height: 320px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+
+    .detail-image.jacket { background: linear-gradient(145deg, #2c3e50 0%, #3d4f63 50%, #1a2534 100%); }
+    .detail-image.scarf  { background: linear-gradient(145deg, #7b4f3a 0%, #9b6348 50%, #5c3828 100%); }
+    .detail-image.shell  { background: linear-gradient(145deg, #2d5016 0%, #3d6b1e 50%, #1e3a0d 100%); }
+
+    .detail-image-inner {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 35% 30%, rgba(255,255,255,0.15) 0%, transparent 55%);
+    }
+
+    /* ── SUCCESS SCREEN ── */
+    .success-screen {
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2d6a4f, #40916c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 32px;
+      color: white;
+    }
+
+    /* ── MODAL ── */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.35);
+      background: rgba(15, 12, 10, 0.5);
       display: none;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
+      z-index: 200;
+      backdrop-filter: blur(3px);
     }
+
     .modal-overlay.active { display: flex; }
+
     .modal {
-      width: min(480px, 100%);
+      width: min(520px, 100%);
       background: white;
       border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 18px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+      padding: 32px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
     }
-    .tag {
-      display: inline-block;
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      margin-right: 6px;
+
+    .modal h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
       margin-bottom: 6px;
     }
-    @media (max-width: 860px) {
-      .product-grid, .grid { grid-template-columns: 1fr; }
+
+    .size-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 13px;
+    }
+
+    .size-table th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--soft);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .size-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .size-table tr:last-child td { border-bottom: 0; }
+
+    /* ── SETTINGS TOGGLE ── */
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-of-type { border-bottom: 0; }
+
+    .setting-label { font-weight: 500; font-size: 14px; }
+    .setting-desc { color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+    .setting-row select {
+      width: auto;
+      min-width: 100px;
+    }
+
+    /* ── SECTION HEADING ── */
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      font-size: 26px;
+      margin: 0;
+    }
+
+    .section-heading .count {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumb a {
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .breadcrumb a:hover { color: var(--text); }
+
+    .breadcrumb-sep { opacity: 0.4; }
+
+    /* ── COUPON INPUT ── */
+    .coupon-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .coupon-row input {
+      flex: 1;
+    }
+
+    .coupon-row button {
+      flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar-layout { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .navbar { padding: 0 20px; }
+      .hero { padding: 40px 28px; }
+      .hero h1 { font-size: 30px; }
+    }
+
+    @media (max-width: 600px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .container { padding: 24px 16px 48px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div>
-        <h1>QA Test App - Complex Shopping Flow</h1>
-        <p class="muted">A richer browser app for testing navigation, filtering, pricing, async UI, forms, and settings.</p>
-      </div>
-      <div class="top-actions">
-        <button id="nav-home" class="secondary">Home</button>
-        <button id="nav-cart" class="secondary">Cart (0)</button>
-        <button id="nav-settings" class="secondary">Settings</button>
-        <button id="reset-app" class="secondary">Reset App</button>
-      </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-brand">M<span>A</span>VEN</div>
+    <div class="navbar-actions">
+      <button id="nav-home" class="nav-btn">Shop</button>
+      <button id="nav-settings" class="nav-btn">Settings</button>
+      <button id="nav-cart" class="nav-btn cart-btn">Bag (0)</button>
+      <button id="reset-app" class="nav-btn ghost">Reset</button>
     </div>
+  </nav>
 
+  <div class="container">
+
+    <!-- HOME SCREEN -->
     <section id="home-screen" class="screen active">
-      <div class="card">
-        <h2>Catalog</h2>
-        <div class="grid">
-          <div>
-            <label for="search-input">Search products</label>
-            <input id="search-input" name="Search products" placeholder="Search products" />
-          </div>
-          <div>
-            <label for="category-select">Category</label>
-            <select id="category-select" name="Category">
-              <option>All</option>
-              <option>Outerwear</option>
-              <option>Accessories</option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-          <button id="apply-filters" class="primary small">Apply Filters</button>
-          <button id="clear-filters" class="small">Clear Filters</button>
-          <span id="filter-status" class="muted">No filters applied.</span>
-        </div>
+      <div class="hero">
+        <div class="product-image-decoration"></div>
+        <div class="hero-eyebrow">New Arrivals · Spring Collection</div>
+        <h1>Dressed for<br />every season.</h1>
+        <p>Premium outerwear and accessories, crafted for the discerning traveler.</p>
+        <button class="btn btn-accent">Explore Collection</button>
       </div>
 
-      <div class="banner" id="search-banner">Tip: search for "jacket" and filter by Outerwear.</div>
+      <div class="banner" id="search-banner">
+        Tip: search for "jacket" and filter by Outerwear to find our bestseller.
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field">
+          <label for="search-input">Search</label>
+          <input id="search-input" name="Search products" placeholder="e.g. jacket, scarf…" />
+        </div>
+        <div class="filter-field">
+          <label for="category-select">Category</label>
+          <select id="category-select" name="Category">
+            <option>All</option>
+            <option>Outerwear</option>
+            <option>Accessories</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+          <button id="apply-filters" class="btn btn-primary btn-sm">Apply</button>
+          <button id="clear-filters" class="btn btn-outline btn-sm">Clear</button>
+        </div>
+        <div id="filter-status" class="muted">No filters applied.</div>
+      </div>
+
+      <div class="section-heading">
+        <h2>All Products</h2>
+        <span class="count">3 items</span>
+      </div>
 
       <div class="product-grid" id="product-grid">
+
         <div class="product-card" data-name="Winter Jacket" data-category="Outerwear">
-          <span class="pill">Outerwear</span>
-          <h3>Winter Jacket</h3>
-          <p class="muted">Waterproof shell with insulated lining.</p>
-          <div class="price">$100</div>
-          <div class="row">
-            <button class="view-product" data-product="Winter Jacket">View Product</button>
-            <button class="quick-add" data-product="Winter Jacket">Quick Add</button>
+          <div class="product-image jacket">
+            <div class="product-image-decoration"></div>
+            <span class="product-category-badge">Outerwear</span>
+          </div>
+          <div class="product-body">
+            <div class="product-name">Winter Jacket</div>
+            <div class="product-desc">Waterproof shell with insulated lining.</div>
+            <div class="product-footer">
+              <div class="price">$100</div>
+              <div class="product-btns">
+                <button class="btn btn-outline btn-sm view-product" data-product="Winter Jacket">Details</button>
+                <button class="btn btn-primary btn-sm quick-add" data-product="Winter Jacket">Add</button>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="product-card" data-name="Wool Scarf" data-category="Accessories">
-          <span class="pill">Accessories</span>
-          <h3>Wool Scarf</h3>
-          <p class="muted">Soft knit scarf for cold weather.</p>
-          <div class="price">$35</div>
-          <div class="row">
-            <button class="view-product" data-product="Wool Scarf">View Product</button>
-            <button class="quick-add" data-product="Wool Scarf">Quick Add</button>
+          <div class="product-image scarf">
+            <div class="product-image-decoration"></div>
+            <span class="product-category-badge">Accessories</span>
+          </div>
+          <div class="product-body">
+            <div class="product-name">Wool Scarf</div>
+            <div class="product-desc">Soft knit scarf for cold weather.</div>
+            <div class="product-footer">
+              <div class="price">$35</div>
+              <div class="product-btns">
+                <button class="btn btn-outline btn-sm view-product" data-product="Wool Scarf">Details</button>
+                <button class="btn btn-primary btn-sm quick-add" data-product="Wool Scarf">Add</button>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="product-card" data-name="Rain Shell" data-category="Outerwear">
-          <span class="pill">Outerwear</span>
-          <h3>Rain Shell</h3>
-          <p class="muted">Lightweight outer shell for travel.</p>
-          <div class="price">$80</div>
-          <div class="row">
-            <button class="view-product" data-product="Rain Shell">View Product</button>
-            <button class="quick-add" data-product="Rain Shell">Quick Add</button>
+          <div class="product-image shell">
+            <div class="product-image-decoration"></div>
+            <span class="product-category-badge">Outerwear</span>
+          </div>
+          <div class="product-body">
+            <div class="product-name">Rain Shell</div>
+            <div class="product-desc">Lightweight outer shell for travel.</div>
+            <div class="product-footer">
+              <div class="price">$80</div>
+              <div class="product-btns">
+                <button class="btn btn-outline btn-sm view-product" data-product="Rain Shell">Details</button>
+                <button class="btn btn-primary btn-sm quick-add" data-product="Rain Shell">Add</button>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </section>
 
+    <!-- PRODUCT DETAIL SCREEN -->
     <section id="product-screen" class="screen">
-      <div class="card">
-        <div class="between">
-          <div>
-            <h2 id="product-title">Winter Jacket</h2>
-            <p id="product-subtitle" class="muted">Product details</p>
-          </div>
-          <button id="back-to-home">Back to Catalog</button>
-        </div>
+      <div class="breadcrumb">
+        <a id="back-to-home">Shop</a>
+        <span class="breadcrumb-sep">›</span>
+        <span id="product-breadcrumb">Product</span>
+      </div>
 
-        <div class="grid">
-          <div>
-            <div class="tag">Free shipping over $50</div>
-            <div class="tag">30-day returns</div>
-            <div class="price" id="product-price">$100</div>
-            <p id="product-description" class="muted">Waterproof shell with insulated lining.</p>
+      <div class="sidebar-layout">
+        <div>
+          <div class="detail-image jacket" id="detail-image">
+            <div class="detail-image-inner"></div>
           </div>
-          <div>
-            <label for="size-select">Size</label>
+        </div>
+        <div>
+          <div style="margin-bottom: 6px;">
+            <span class="tag">Free shipping over $50</span>
+            <span class="tag">30-day returns</span>
+          </div>
+          <h2 id="product-title" style="font-size: 30px; margin-bottom: 8px;">Winter Jacket</h2>
+          <p id="product-subtitle" class="muted" style="font-size: 13px; margin-bottom: 4px;">Product details</p>
+          <div class="price-small" id="product-price" style="margin-bottom: 12px;">$100</div>
+          <p id="product-description" class="muted" style="margin-bottom: 24px; font-size: 14px; line-height: 1.7;">
+            Waterproof shell with insulated lining.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="size-select">Size</label>
             <select id="size-select" name="Size">
               <option>Select size</option>
               <option>S</option>
               <option>M</option>
               <option>L</option>
             </select>
-
-            <label for="qty-input">Quantity</label>
-            <input id="qty-input" name="Quantity" type="number" min="1" value="1" placeholder="Quantity" />
-
-            <div class="row">
-              <button id="open-size-guide" class="small">Open Size Guide</button>
-              <button id="add-to-cart" class="primary">Add to Cart</button>
-            </div>
-            <div id="product-error" class="error"></div>
-            <div id="product-message" class="success"></div>
           </div>
+
+          <div class="form-group">
+            <label class="form-label" for="qty-input">Quantity</label>
+            <input id="qty-input" name="Quantity" type="number" min="1" value="1" />
+          </div>
+
+          <div class="row" style="margin-bottom: 12px;">
+            <button id="add-to-cart" class="btn btn-accent" style="flex: 1;">Add to Bag</button>
+            <button id="open-size-guide" class="btn btn-outline">Size Guide</button>
+          </div>
+
+          <div id="product-error" class="text-error"></div>
+          <div id="product-message" class="text-success"></div>
         </div>
       </div>
     </section>
 
+    <!-- CART SCREEN -->
     <section id="cart-screen" class="screen">
-      <div class="grid">
+      <div class="section-heading">
+        <h2>Your Bag</h2>
+        <button id="continue-shopping" class="btn-ghost btn" style="font-size:13px;">← Continue Shopping</button>
+      </div>
+
+      <div class="sidebar-layout">
         <div class="card">
-          <h2>Cart</h2>
           <div id="cart-items"></div>
-          <div id="empty-cart-message" class="muted">Your cart is empty.</div>
+          <div id="empty-cart-message" class="muted" style="padding: 24px 0; text-align:center;">Your bag is empty.</div>
         </div>
 
-        <div class="card">
-          <h2>Order Summary</h2>
-          <label for="coupon-input">Coupon</label>
-          <input id="coupon-input" name="Coupon" placeholder="Coupon" />
-          <div class="row">
-            <button id="apply-coupon">Apply Coupon</button>
-            <button id="estimate-shipping">Estimate Shipping</button>
-          </div>
-          <div id="coupon-message" class="muted"></div>
-          <div id="shipping-status" class="muted"></div>
-          <div class="summary-line"><span>Subtotal</span><span id="subtotal-value">$0</span></div>
-          <div class="summary-line"><span>Shipping</span><span id="shipping-value">$0</span></div>
-          <div class="summary-line"><span>Discount</span><span id="discount-value">$0</span></div>
-          <div class="summary-line"><strong>Total</strong><strong id="total-value">$0</strong></div>
-          <div class="row" style="margin-top: 14px;">
-            <button id="go-to-checkout" class="primary">Proceed to Checkout</button>
-            <button id="continue-shopping">Continue Shopping</button>
+        <div>
+          <div class="card">
+            <div class="card-title">Order Summary</div>
+
+            <div class="form-group">
+              <label class="form-label" for="coupon-input">Promo Code</label>
+              <div class="coupon-row">
+                <input id="coupon-input" name="Coupon" placeholder="Enter code" />
+                <button id="apply-coupon" class="btn btn-outline btn-sm">Apply</button>
+              </div>
+              <div id="coupon-message" class="muted" style="margin-top: 6px; font-size: 12px;"></div>
+            </div>
+
+            <div id="shipping-status" class="muted" style="font-size: 12px; margin-bottom: 14px;"></div>
+
+            <div class="summary-line"><span class="muted">Subtotal</span><span id="subtotal-value">$0</span></div>
+            <div class="summary-line"><span class="muted">Shipping</span><span id="shipping-value">$0</span></div>
+            <div class="summary-line"><span class="muted">Discount</span><span id="discount-value" style="color: var(--success);">–$0</span></div>
+            <div class="summary-line summary-total"><span>Total</span><span id="total-value">$0</span></div>
+
+            <div class="row" style="margin-top: 20px; flex-direction: column; gap: 10px;">
+              <button id="go-to-checkout" class="btn btn-accent" style="width:100%;">Proceed to Checkout</button>
+              <button id="estimate-shipping" class="btn btn-outline" style="width:100%;">Estimate Shipping</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- CHECKOUT SCREEN -->
     <section id="checkout-screen" class="screen">
-      <div class="grid">
+      <div class="breadcrumb">
+        <a id="back-to-cart">Bag</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Checkout</span>
+      </div>
+
+      <div class="sidebar-layout">
         <div class="card">
-          <h2>Checkout</h2>
-          <label for="full-name">Full Name</label>
-          <input id="full-name" name="Full Name" placeholder="Full Name" />
+          <div class="card-title">Shipping Information</div>
 
-          <label for="email">Email</label>
-          <input id="email" name="Email" placeholder="Email" />
-
-          <label for="address">Address</label>
-          <input id="address" name="Address" placeholder="Address" />
-
-          <label for="zip-code">ZIP Code</label>
-          <input id="zip-code" name="ZIP Code" placeholder="ZIP Code" />
-
-          <label for="delivery-select">Delivery Method</label>
-          <select id="delivery-select" name="Delivery Method">
-            <option>Standard</option>
-            <option>Express</option>
-          </select>
-
-          <div class="row">
-            <button id="place-order" class="primary">Place Order</button>
-            <button id="back-to-cart">Back to Cart</button>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label" for="full-name">Full Name</label>
+              <input id="full-name" name="Full Name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address</label>
+              <input id="email" name="Email" placeholder="jane@example.com" />
+            </div>
           </div>
 
-          <div id="checkout-error" class="error"></div>
-          <div id="checkout-message" class="success"></div>
+          <div class="form-group">
+            <label class="form-label" for="address">Street Address</label>
+            <input id="address" name="Address" placeholder="123 Main Street, Apt 4B" />
+          </div>
+
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label" for="zip-code">ZIP Code</label>
+              <input id="zip-code" name="ZIP Code" placeholder="10001" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="delivery-select">Delivery</label>
+              <select id="delivery-select" name="Delivery Method">
+                <option>Standard (5–7 days)</option>
+                <option>Express (2–3 days)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 8px;">
+            <button id="place-order" class="btn btn-accent" style="flex:1;">Place Order</button>
+          </div>
+
+          <div id="checkout-error" class="text-error"></div>
+          <div id="checkout-message" class="text-success"></div>
         </div>
 
-        <div class="card">
-          <h2>Checkout Summary</h2>
-          <div id="checkout-summary"></div>
+        <div>
+          <div class="card">
+            <div class="card-title">Order Summary</div>
+            <div id="checkout-summary"></div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- SUCCESS SCREEN -->
     <section id="success-screen" class="screen">
-      <div class="card">
-        <h2 class="success">Order Confirmed</h2>
-        <p>Your order was placed successfully.</p>
-        <p id="success-order-id" class="muted">Order ID: QA-2048</p>
-        <div class="row">
-          <button id="return-home" class="primary">Return Home</button>
-        </div>
+      <div class="card success-screen">
+        <div class="success-icon">✓</div>
+        <h2 style="font-size: 32px; margin-bottom: 10px;">Order Confirmed</h2>
+        <p class="muted" style="margin-bottom: 6px;">Thank you for shopping with MAVEN.</p>
+        <p id="success-order-id" class="muted" style="font-size: 13px; margin-bottom: 32px;">Order ID: QA-2048</p>
+        <button id="return-home" class="btn btn-primary">Continue Shopping</button>
       </div>
     </section>
 
+    <!-- SETTINGS SCREEN -->
     <section id="settings-screen" class="screen">
+      <div class="section-heading">
+        <h2>Account Settings</h2>
+      </div>
       <div class="card">
-        <h2>Settings</h2>
-        <p class="muted">Use this page to test toggles and preference persistence.</p>
-        <label for="save-card-toggle">Save card for later</label>
-        <select id="save-card-toggle" name="Save card for later">
-          <option>Off</option>
-          <option>On</option>
-        </select>
+        <div class="card-title">Preferences</div>
+        <p class="muted" style="font-size: 13px; margin-bottom: 24px;">Manage your account preferences and communication settings.</p>
 
-        <label for="marketing-toggle">Marketing emails</label>
-        <select id="marketing-toggle" name="Marketing emails">
-          <option>Off</option>
-          <option>On</option>
-        </select>
-
-        <div class="row">
-          <button id="save-settings" class="primary">Save Settings</button>
-          <button id="settings-home">Return Home</button>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Save card for later</div>
+            <div class="setting-desc">Securely store your payment method for faster checkout.</div>
+          </div>
+          <select id="save-card-toggle" name="Save card for later" style="width:auto; min-width: 90px;">
+            <option>Off</option>
+            <option>On</option>
+          </select>
         </div>
-        <div id="settings-message" class="muted"></div>
+
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Marketing emails</div>
+            <div class="setting-desc">Receive updates on new arrivals and exclusive offers.</div>
+          </div>
+          <select id="marketing-toggle" name="Marketing emails" style="width:auto; min-width: 90px;">
+            <option>Off</option>
+            <option>On</option>
+          </select>
+        </div>
+
+        <div class="row" style="margin-top: 28px; gap: 12px;">
+          <button id="save-settings" class="btn btn-primary">Save Changes</button>
+          <button id="settings-home" class="btn btn-outline">Return Home</button>
+        </div>
+        <div id="settings-message" class="text-success" style="margin-top: 12px;"></div>
       </div>
     </section>
+
   </div>
 
+  <!-- SIZE GUIDE MODAL -->
   <div id="size-guide-overlay" class="modal-overlay">
     <div class="modal">
       <h3>Size Guide</h3>
-      <p class="muted">This modal gives the agent another UI element to open and close.</p>
-      <p>S = Chest 34–36, M = Chest 38–40, L = Chest 42–44</p>
-      <div class="row">
-        <button id="close-size-guide" class="primary">Close Size Guide</button>
-      </div>
+      <p class="muted" style="font-size: 13px; margin-bottom: 0;">Find your perfect fit with our measurement guide.</p>
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Chest (in)</th>
+            <th>Waist (in)</th>
+            <th>Hip (in)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>S</strong></td><td>34–36</td><td>28–30</td><td>36–38</td></tr>
+          <tr><td><strong>M</strong></td><td>38–40</td><td>32–34</td><td>40–42</td></tr>
+          <tr><td><strong>L</strong></td><td>42–44</td><td>36–38</td><td>44–46</td></tr>
+        </tbody>
+      </table>
+      <button id="close-size-guide" class="btn btn-primary" style="width:100%;">Close</button>
     </div>
   </div>
 
   <script>
+    const productMeta = {
+      'Winter Jacket': { imageClass: 'jacket', category: 'Outerwear' },
+      'Wool Scarf':    { imageClass: 'scarf',  category: 'Accessories' },
+      'Rain Shell':    { imageClass: 'shell',  category: 'Outerwear' },
+    };
+
     const state = {
       currentScreen: 'home',
       selectedProduct: {
@@ -426,40 +1123,46 @@
     };
 
     const screens = {
-      home: document.getElementById('home-screen'),
-      product: document.getElementById('product-screen'),
-      cart: document.getElementById('cart-screen'),
+      home:     document.getElementById('home-screen'),
+      product:  document.getElementById('product-screen'),
+      cart:     document.getElementById('cart-screen'),
       checkout: document.getElementById('checkout-screen'),
-      success: document.getElementById('success-screen'),
+      success:  document.getElementById('success-screen'),
       settings: document.getElementById('settings-screen'),
     };
 
     const products = {
       'Winter Jacket': { name: 'Winter Jacket', price: 100, description: 'Waterproof shell with insulated lining.' },
-      'Wool Scarf': { name: 'Wool Scarf', price: 35, description: 'Soft knit scarf for cold weather.' },
-      'Rain Shell': { name: 'Rain Shell', price: 80, description: 'Lightweight outer shell for travel.' },
+      'Wool Scarf':    { name: 'Wool Scarf',    price: 35,  description: 'Soft knit scarf for cold weather.' },
+      'Rain Shell':    { name: 'Rain Shell',    price: 80,  description: 'Lightweight outer shell for travel.' },
     };
 
     function showScreen(name) {
-      Object.values(screens).forEach((screen) => screen.classList.remove('active'));
+      Object.values(screens).forEach((s) => s.classList.remove('active'));
       screens[name].classList.add('active');
       state.currentScreen = name;
       renderCart();
       renderCheckoutSummary();
       syncNav();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function syncNav() {
       const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-      document.getElementById('nav-cart').textContent = `Cart (${cartCount})`;
+      document.getElementById('nav-cart').textContent = `Bag (${cartCount})`;
     }
 
     function setProduct(name) {
       const product = products[name];
+      const meta = productMeta[name] || { imageClass: 'jacket', category: '' };
       state.selectedProduct = product;
       document.getElementById('product-title').textContent = product.name;
+      document.getElementById('product-breadcrumb').textContent = product.name;
       document.getElementById('product-price').textContent = `$${product.price}`;
       document.getElementById('product-description').textContent = product.description;
+      document.getElementById('product-subtitle').textContent = meta.category;
+      const detailImage = document.getElementById('detail-image');
+      detailImage.className = `detail-image ${meta.imageClass}`;
       document.getElementById('qty-input').value = '1';
       document.getElementById('size-select').value = 'Select size';
       document.getElementById('product-error').textContent = '';
@@ -475,6 +1178,10 @@
       return subtotal() + state.shipping - state.discount;
     }
 
+    function thumbClass(name) {
+      return (productMeta[name] || {}).imageClass || 'jacket';
+    }
+
     function renderCart() {
       const cartItems = document.getElementById('cart-items');
       const empty = document.getElementById('empty-cart-message');
@@ -486,19 +1193,16 @@
         empty.classList.add('hidden');
         state.cart.forEach((item, index) => {
           const row = document.createElement('div');
-          row.className = 'card';
-          row.style.marginBottom = '10px';
+          row.className = 'cart-item';
           row.innerHTML = `
-            <div class="between">
-              <div>
-                <div><strong>${item.name}</strong></div>
-                <div class="muted">Size: ${item.size}</div>
-                <div class="muted">Quantity: ${item.quantity}</div>
-              </div>
-              <div>
-                <div><strong>$${item.price * item.quantity}</strong></div>
-                <button class="small remove-item" data-index="${index}">Remove Item</button>
-              </div>
+            <div class="cart-item-thumb ${thumbClass(item.name)}"></div>
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-meta">Size: ${item.size} · Qty: ${item.quantity}</div>
+            </div>
+            <div>
+              <div class="cart-item-price">$${item.price * item.quantity}</div>
+              <button class="btn-danger remove-item" data-index="${index}" style="margin-top: 6px; display:block;">Remove</button>
             </div>
           `;
           cartItems.appendChild(row);
@@ -507,7 +1211,7 @@
 
       document.getElementById('subtotal-value').textContent = `$${subtotal()}`;
       document.getElementById('shipping-value').textContent = `$${state.shipping}`;
-      document.getElementById('discount-value').textContent = `-$${state.discount}`;
+      document.getElementById('discount-value').textContent = `–$${state.discount}`;
       document.getElementById('total-value').textContent = `$${total()}`;
 
       document.querySelectorAll('.remove-item').forEach((button) => {
@@ -524,10 +1228,10 @@
     function renderCheckoutSummary() {
       const container = document.getElementById('checkout-summary');
       container.innerHTML = `
-        <div class="summary-line"><span>Subtotal</span><span>$${subtotal()}</span></div>
-        <div class="summary-line"><span>Shipping</span><span>$${state.shipping}</span></div>
-        <div class="summary-line"><span>Discount</span><span>-$${state.discount}</span></div>
-        <div class="summary-line"><strong>Total</strong><strong>$${total()}</strong></div>
+        <div class="summary-line"><span class="muted">Subtotal</span><span>$${subtotal()}</span></div>
+        <div class="summary-line"><span class="muted">Shipping</span><span>$${state.shipping}</span></div>
+        <div class="summary-line"><span class="muted">Discount</span><span style="color: var(--success);">–$${state.discount}</span></div>
+        <div class="summary-line summary-total"><span>Total</span><span>$${total()}</span></div>
       `;
     }
 
@@ -572,17 +1276,18 @@
         const cardCategory = card.dataset.category;
         const matchesSearch = !search || name.includes(search);
         const matchesCategory = category === 'All' || category === cardCategory;
-        card.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+        card.style.display = matchesSearch && matchesCategory ? '' : 'none';
       });
 
-      document.getElementById('filter-status').textContent = `Filters applied: search="${search || 'none'}", category="${category}".`;
+      document.getElementById('filter-status').textContent =
+        `Filters applied: search="${search || 'none'}", category="${category}".`;
     });
 
     document.getElementById('clear-filters').addEventListener('click', () => {
       document.getElementById('search-input').value = '';
       document.getElementById('category-select').value = 'All';
       document.querySelectorAll('.product-card').forEach((card) => {
-        card.style.display = 'block';
+        card.style.display = '';
       });
       document.getElementById('filter-status').textContent = 'No filters applied.';
     });
@@ -604,22 +1309,16 @@
       message.textContent = '';
 
       if (size === 'Select size') {
-        error.textContent = 'Please select a size before adding to cart.';
+        error.textContent = 'Please select a size before adding to your bag.';
         return;
       }
-
       if (!quantity || quantity < 1) {
         error.textContent = 'Quantity must be at least 1.';
         return;
       }
 
-      state.cart.push({
-        ...state.selectedProduct,
-        size,
-        quantity,
-      });
-
-      message.textContent = 'Item added to cart.';
+      state.cart.push({ ...state.selectedProduct, size, quantity });
+      message.textContent = 'Item added to your bag.';
       syncNav();
       renderCart();
     });
@@ -633,9 +1332,9 @@
       if (coupon === 'SUMMER20') {
         // Intentional bug: should be 20, but incorrect discount is 10.
         state.discount = 10;
-        message.textContent = 'Coupon applied.';
+        message.textContent = 'Promo code applied.';
       } else if (coupon) {
-        message.textContent = 'Coupon code not recognized.';
+        message.textContent = 'Code not recognized.';
       }
 
       renderCart();
@@ -644,7 +1343,7 @@
 
     document.getElementById('estimate-shipping').addEventListener('click', () => {
       const status = document.getElementById('shipping-status');
-      status.textContent = 'Calculating shipping...';
+      status.textContent = 'Calculating shipping…';
       setTimeout(() => {
         state.shipping = 8;
         status.textContent = 'Shipping estimate ready.';
@@ -656,7 +1355,7 @@
     document.getElementById('save-settings').addEventListener('click', () => {
       state.settings.saveCard = document.getElementById('save-card-toggle').value;
       state.settings.marketing = document.getElementById('marketing-toggle').value;
-      document.getElementById('settings-message').textContent = 'Settings saved.';
+      document.getElementById('settings-message').textContent = 'Settings saved successfully.';
     });
 
     document.getElementById('place-order').addEventListener('click', () => {
@@ -676,16 +1375,12 @@
 
       // Intentional bug: invalid ZIP should be blocked, but the app still succeeds.
       if (zip.length < 5) {
-        message.textContent = 'Processing order...';
-        setTimeout(() => {
-          showScreen('success');
-        }, 500);
+        message.textContent = 'Processing order…';
+        setTimeout(() => showScreen('success'), 500);
         return;
       }
 
-      setTimeout(() => {
-        showScreen('success');
-      }, 500);
+      setTimeout(() => showScreen('success'), 500);
     });
 
     document.getElementById('reset-app').addEventListener('click', () => {
@@ -702,14 +1397,14 @@
       document.getElementById('email').value = '';
       document.getElementById('address').value = '';
       document.getElementById('zip-code').value = '';
-      document.getElementById('delivery-select').value = 'Standard';
+      document.getElementById('delivery-select').selectedIndex = 0;
       document.getElementById('size-select').value = 'Select size';
       document.getElementById('qty-input').value = '1';
       document.getElementById('save-card-toggle').value = 'Off';
       document.getElementById('marketing-toggle').value = 'Off';
       document.getElementById('filter-status').textContent = 'No filters applied.';
       document.querySelectorAll('.product-card').forEach((card) => {
-        card.style.display = 'block';
+        card.style.display = '';
       });
       resetMessages();
       document.getElementById('size-guide-overlay').classList.remove('active');
