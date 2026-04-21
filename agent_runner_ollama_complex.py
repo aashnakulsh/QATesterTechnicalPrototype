@@ -233,10 +233,7 @@ def get_select_value(observation: Dict[str, Any], label: str) -> str:
 def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]]) -> AgentDecision:
     buttons = observation.get("buttons", [])
     text = observation.get("body_text", "")
-    # history_text = json.dumps(history)
 
-    # def seen(fragment: str) -> bool:
-    #     return fragment in history_text
     def seen(fragment: str) -> bool:
         return any(fragment in str(step.get("action_result", "")) for step in history)
 
@@ -248,7 +245,14 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
                 return True
         return False
 
-    if "Apply Filters" in buttons and not seen('Typed into "Search products"'):
+    # Count "Apply" clicks to distinguish the filter-Apply (step ~3) from coupon-Apply (step ~12).
+    apply_click_count = sum(
+        1 for step in history if step.get("action_result") == "Clicked 'Apply'."
+    )
+
+    # ── HOME SCREEN — identified by presence of "Clear" (filter clear button) ──
+
+    if "Clear" in buttons and not seen('Typed into "Search products"'):
         return AgentDecision(
             thought="Start by narrowing the catalog to the target product.",
             expected_check="The search field should contain jacket.",
@@ -257,7 +261,7 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Apply Filters" in buttons and get_select_value(observation, "Category") != "Outerwear":
+    if "Clear" in buttons and get_select_value(observation, "Category") != "Outerwear":
         return AgentDecision(
             thought="Set the category filter to Outerwear before applying filters.",
             expected_check="Category should be set to Outerwear.",
@@ -266,43 +270,46 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Apply Filters" in buttons and not seen("Clicked 'Apply Filters'."):
+    if "Clear" in buttons and apply_click_count == 0:
         return AgentDecision(
             thought="Apply the current catalog filters.",
             expected_check="Winter Jacket should remain visible.",
-            action=Action(type="CLICK_TEXT", target_text="Apply Filters"),
+            action=Action(type="CLICK_TEXT", target_text="Apply"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "View Product" in buttons and "Winter Jacket" in text and not seen("Clicked 'View Product'."):
+    # Product cards show "Details" buttons; after filtering only Winter Jacket is visible.
+    if "Details" in buttons and "Winter Jacket" in text and not seen("Clicked 'Details'."):
         return AgentDecision(
             thought="Open the target product page.",
             expected_check="The product page should load for Winter Jacket.",
-            action=Action(type="CLICK_TEXT", target_text="View Product"),
+            action=Action(type="CLICK_TEXT", target_text="Details"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Open Size Guide" in buttons and not seen("Clicked 'Open Size Guide'."):
+    # ── PRODUCT SCREEN — identified by "Size Guide" / "Add to Bag" ──
+
+    if "Size Guide" in buttons and not seen("Clicked 'Size Guide'."):
         return AgentDecision(
             thought="Exercise the product modal once before adding to cart.",
             expected_check="The size guide modal should appear.",
-            action=Action(type="CLICK_TEXT", target_text="Open Size Guide"),
+            action=Action(type="CLICK_TEXT", target_text="Size Guide"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Close Size Guide" in buttons and not seen("Clicked 'Close Size Guide'."):
+    if "Close" in buttons and not seen("Clicked 'Close'."):
         return AgentDecision(
             thought="Close the size guide modal and continue the purchase flow.",
             expected_check="The product page should be visible again.",
-            action=Action(type="CLICK_TEXT", target_text="Close Size Guide"),
+            action=Action(type="CLICK_TEXT", target_text="Close"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Add to Cart" in buttons and get_select_value(observation, "Size") != "M":
+    if "Add to Bag" in buttons and get_select_value(observation, "Size") != "M":
         return AgentDecision(
             thought="Select size M before adding the product to the cart.",
             expected_check="The size selector should show M.",
@@ -311,34 +318,38 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Add to Cart" in buttons and get_input_value(observation, "Quantity") != "1":
+    if "Add to Bag" in buttons and get_input_value(observation, "Quantity") != "1":
         return AgentDecision(
-            thought="Use the default quantity of 1 so the expected coupon math stays simple.",
+            thought="Use quantity 1 so the expected coupon math stays simple.",
             expected_check="Quantity should be 1.",
             action=Action(type="TYPE_TEXT", field_text="Quantity", input_text="1"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Add to Cart" in buttons and not seen("Clicked 'Add to Cart'."):
+    if "Add to Bag" in buttons and not seen("Clicked 'Add to Bag'."):
         return AgentDecision(
             thought="Add the configured product to the cart.",
             expected_check="The product page should confirm that the item was added.",
-            action=Action(type="CLICK_TEXT", target_text="Add to Cart"),
+            action=Action(type="CLICK_TEXT", target_text="Add to Bag"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Cart (1)" in buttons and not seen("Clicked 'Cart (1)'."):
+    # Navigate to cart — button label changed to "Bag (N)".
+    if "Bag (1)" in buttons and not seen("Clicked 'Bag (1)'."):
         return AgentDecision(
             thought="Go to the cart after adding the item.",
             expected_check="The cart screen should appear.",
-            action=Action(type="CLICK_TEXT", target_text="Cart (1)"),
+            action=Action(type="CLICK_TEXT", target_text="Bag (1)"),
             bug_suspected=False,
             source="fallback",
         )
 
-    if "Apply Coupon" in buttons and get_input_value(observation, "Coupon") != "SUMMER20":
+    # ── CART SCREEN — identified by "Proceed to Checkout" ──
+    # Coupon input placeholder changed to "Enter code"; name attr is still "Coupon".
+
+    if "Proceed to Checkout" in buttons and get_input_value(observation, "Enter code") != "SUMMER20":
         return AgentDecision(
             thought="Enter the coupon code before testing the pricing logic.",
             expected_check="The coupon field should contain SUMMER20.",
@@ -347,54 +358,40 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Apply Coupon" in buttons and not seen("Clicked 'Apply Coupon'."):
+    # apply_click_count == 1 means filter Apply happened; coupon Apply hasn't yet.
+    if "Proceed to Checkout" in buttons and seen('Typed into "Coupon".') and apply_click_count < 2:
         return AgentDecision(
             thought="Apply the coupon and inspect the resulting summary.",
-            expected_check="The discount should become $20 and the total should update accordingly.",
-            action=Action(type="CLICK_TEXT", target_text="Apply Coupon"),
+            expected_check="The discount should update accordingly.",
+            action=Action(type="CLICK_TEXT", target_text="Apply"),
             bug_suspected=False,
             source="fallback",
         )
 
-    # if "Discount" in text and "-$10" in text and not seen("Coupon applies incorrect total"):
-    #     return AgentDecision(
-    #         thought="The discount amount is visibly incorrect after coupon application.",
-    #         expected_check="Discount should be -$20 for one $100 jacket with SUMMER20.",
-    #         action=Action(type="CLICK_TEXT", target_text="Estimate Shipping"),
-    #         bug_suspected=True,
-    #         bug={
-    #             "title": "Coupon applies incorrect discount",
-    #             "severity": "Medium",
-    #             "expected": "SUMMER20 should reduce a $100 subtotal by $20.",
-    #             "actual": "The order summary shows Discount -$10 after applying SUMMER20.",
-    #             "reason": "The pricing logic appears to apply the wrong discount amount.",
-    #         },
-    #         source="fallback",
-    #     )
-
-
-    if "Calculating shipping..." in text:
-        return AgentDecision(
-            thought="Wait for the asynchronous shipping estimate to complete.",
-            expected_check="The page should show Shipping estimate ready.",
-            action=Action(type="WAIT_FOR_TEXT", target_text="Shipping estimate ready.", wait_ms=2000),
-            bug_suspected=False,
-            source="fallback",
-        )
-    
-    if "Discount" in text and "-$10" in text and not seen_bug("Coupon applies incorrect discount"):
+    # Discount renders with en-dash (–) in the redesigned UI.
+    if "Discount" in text and "–$10" in text and not seen_bug("Coupon applies incorrect discount"):
         return AgentDecision(
             thought="The discount amount is visibly incorrect after coupon application.",
-            expected_check="Discount should be -$20 for one $100 jacket with SUMMER20.",
+            expected_check="Discount should be –$20 for one $100 jacket with SUMMER20.",
             action=Action(type="CLICK_TEXT", target_text="Estimate Shipping"),
             bug_suspected=True,
             bug={
                 "title": "Coupon applies incorrect discount",
                 "severity": "Medium",
                 "expected": "SUMMER20 should reduce a $100 subtotal by $20.",
-                "actual": "The order summary shows Discount -$10 after applying SUMMER20.",
+                "actual": "The order summary shows Discount –$10 after applying SUMMER20.",
                 "reason": "The pricing logic appears to apply the wrong discount amount.",
             },
+            source="fallback",
+        )
+
+    # Shipping status text uses the Unicode ellipsis character (…).
+    if "Calculating shipping…" in text:
+        return AgentDecision(
+            thought="Wait for the asynchronous shipping estimate to complete.",
+            expected_check="The page should show Shipping estimate ready.",
+            action=Action(type="WAIT_FOR_TEXT", target_text="Shipping estimate ready.", wait_ms=2000),
+            bug_suspected=False,
             source="fallback",
         )
 
@@ -416,7 +413,11 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Place Order" in buttons and get_input_value(observation, "Full Name") != "Taylor Rivera":
+    # ── CHECKOUT SCREEN ──
+    # Input placeholders changed; name attrs are unchanged so typing still works,
+    # but get_input_value must use the placeholder as the label key.
+
+    if "Place Order" in buttons and get_input_value(observation, "Jane Smith") != "Taylor Rivera":
         return AgentDecision(
             thought="Fill the name field before submission.",
             expected_check="Full Name should be set.",
@@ -425,7 +426,7 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Place Order" in buttons and get_input_value(observation, "Email") != "taylor@example.com":
+    if "Place Order" in buttons and get_input_value(observation, "jane@example.com") != "taylor@example.com":
         return AgentDecision(
             thought="Fill the email field before submission.",
             expected_check="Email should be set.",
@@ -434,7 +435,7 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Place Order" in buttons and get_input_value(observation, "Address") != "500 Forbes Ave":
+    if "Place Order" in buttons and get_input_value(observation, "123 Main Street, Apt 4B") != "500 Forbes Ave":
         return AgentDecision(
             thought="Fill the address field before submission.",
             expected_check="Address should be set.",
@@ -443,7 +444,7 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Place Order" in buttons and get_input_value(observation, "ZIP Code") != "12":
+    if "Place Order" in buttons and get_input_value(observation, "10001") != "12":
         return AgentDecision(
             thought="Use an obviously invalid ZIP to test validation.",
             expected_check="ZIP Code should be set to 12 before submission.",
@@ -461,7 +462,8 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Processing order..." in text:
+    # Order processing uses Unicode ellipsis (…) in the redesigned UI.
+    if "Processing order…" in text:
         return AgentDecision(
             thought="Wait for the order processing state to complete.",
             expected_check="The next visible state should reveal whether validation blocked submission.",
@@ -470,7 +472,7 @@ def heuristic_decision(observation: Dict[str, Any], history: List[Dict[str, Any]
             source="fallback",
         )
 
-    if "Order Confirmed" in text and not seen("Checkout accepts invalid ZIP code"):
+    if "Order Confirmed" in text and not seen_bug("Checkout accepts invalid ZIP code"):
         return AgentDecision(
             thought="The app reached success even though ZIP 12 should have been rejected.",
             expected_check="The app should have remained on checkout with a validation error.",
